@@ -1,0 +1,25 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrant - Hyper-V config. Credits / Sources:
+# https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/
+# https://github.com/Shinzu/vagrant-hyperv/blob/debian/Vagrantfile
+# https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/debian.html
+# https://developer.hashicorp.com/vagrant/docs/providers/hyperv/configuration
+# https://docs.vagrantup.com
+# https://vagrantcloud.com/search
+
+
+Vagrant.configure("2") do |config|
+	config.vm.synced_folder ".", "/vagrant", disabled: true
+	config.vm.define "debian", primary: true do |debian|
+		debian.vm.box = "generic/debian12"
+		debian.vm.provider "hyperv" do |h|
+			h.linked_clone = true
+			h.cpus = 6
+			h.maxmemory = 4096
+			h.memory = 4096
+			h.vmname = "debian"
+		end
+	end
+end
